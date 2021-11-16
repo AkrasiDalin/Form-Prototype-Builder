@@ -10,7 +10,7 @@ body {
 }
 
 #sortable {
-    background-color: rgb(200, 200, 255);
+    /* background-color: rgb(200, 200, 255); */
     border: 1px dashed black;
     padding: 50px;
     width: 100%;
@@ -18,9 +18,10 @@ body {
 }
 
 .control-group {
-    /* height: 100px; */
+    min-height: 24px;
     margin-bottom: 30px;
     position: relative;
+    /* width: 100%; */
     /* background-color: red; */
 }
 
@@ -29,13 +30,14 @@ body {
     width: 250px;
     padding-right: 15px;
     float: left;
-    /* background-color: blue; */
+    /* background-color: rgb(252, 206, 0); */
 }
 
 
 .controls {
     /* display: block; */
     margin-left: 32%;
+    /* background-color: #04AA6D; */
 }
 
 
@@ -83,7 +85,6 @@ body {
     border-bottom-right-radius: 25%;
 }
   
-  /* Add a background color on hover */
 .btn-group button:hover {
     background-color: #3e8e41;
 }

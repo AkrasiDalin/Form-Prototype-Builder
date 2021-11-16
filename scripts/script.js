@@ -138,29 +138,22 @@ const TextBox = () => {
 const SectionLabel = () => {
     const sectionLabel = $('<label/>', {
         id: 'section-label-0',
-        cols: 70,
-        rows: 4
-    })
-    .wrap($("<div>", {class: 'controls'})).parent();
-
-    const label = $('<label/>', {
         class: 'control-label',
         text: 'SectionLabel'
-    })
+    });
 
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, sectionLabel, options])
+    return $("<li>", {class: 'control-group'}).append([sectionLabel, options])
 }
 
 const Label = () => {
-    const label = $('<label/>', {
+    const label = $('<label>', {
         id: 'label',
         class: 'control-label',
         text: 'Label'
-    })
-    .wrap($("<div>", {class: 'controls'})).parent();
+    });
 
     let options = Options();
 
@@ -171,20 +164,14 @@ const Label = () => {
 const InfoLabel = () => {
     const infoLabel = $('<label/>', {
         id: 'info-label-0',
-        cols: 70,
-        rows: 4
-    })
-    .wrap($("<div>", {class: 'controls'})).parent();
-
-    const label = $('<label/>', {
         class: 'control-label',
         text: 'InfoLabel'
-    })
+    });
 
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, infoLabel, options])
+    return $("<li>", {class: 'control-group'}).append([infoLabel, options])
 }
 
 const DropDown = () => {
@@ -243,14 +230,14 @@ const InfoBox = () => {
 }
 
 const CheckBox = () => {
-    const checkBox = $('<textarea/>', {
+    const checkBox = $('<input>', {
         id: 'check-box-0',
         cols: 70,
         rows: 4
     })
     .wrap($("<div>", {class: 'controls'})).parent();
 
-    const label = $('<label/>', {
+    const label = $('<label>', {
         class: 'control-label',
         text: 'CheckBox'
     })
