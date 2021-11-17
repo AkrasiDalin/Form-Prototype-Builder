@@ -5,7 +5,9 @@ $( function() {
     $( ".draggable" ).draggable({
         connectToSortable: "#sortable",
         helper: "clone",
-        revert: "invalid",
+        revert: "false",
+        appendTo: "#sortable",
+        distance: "100",
         stop: function( event, ui ) {
             let elemID = ui.helper.prevObject.attr('id');
             console.log("act full:",elemID)
@@ -85,15 +87,28 @@ const Options = () => {
         text: 'X'
     }).click(function(){$(this).closest('li').remove()});
 
-    const editBtn = $('<button/>', {
-        id: 'edit',
-        // class: 'navbar-toggler',
-        text: 'X'
-    }).click(function(){$(this).closest('li').remove()});
+
+    let menu = `
+    <div class="dropdown">
+  <button type="button" class="btn btn-primary  bi bi-tools" data-bs-toggle="dropdown">
+    </button>
+    <ul class="dropdown-menu">
+        <input type='text'>
+        <li><a class="dropdown-item" href="#">Link 2</a></li>
+        <li><a class="dropdown-item" href="#">Link 3</a></li>
+    </ul>
+    </div>
+    `;
+    const editBtn = $(menu) 
+    // {
+    //     id: 'edit',
+    //     class: 'bi bi-tools',
+    //     // text: ''
+    // }).click(function(){$(this).closest('li').remove()});
 
     const deleteBtn = $('<button/>', {
-        // class: 'btn',
-        text: 'X'
+        class: 'bi bi-trash',
+        // text: 'X'
     }).click(function(){$(this).closest('li').remove()});
 
     return $("<div>", {class: 'options btn-group'}).append([editBtn, deleteBtn])
@@ -136,7 +151,7 @@ const TextBox = () => {
 }
 
 const SectionLabel = () => {
-    const sectionLabel = $('<label/>', {
+    const sectionLabel = $('<h5/>', {
         id: 'section-label-0',
         class: 'control-label',
         text: 'SectionLabel'
@@ -191,6 +206,7 @@ const DropDown = () => {
     return $("<li>", {class: 'control-group'}).append([label, dropdown, options])
 }
 
+
 const TextArea = () => {
     const textarea = $('<textarea/>', {
         id: 'text-area-0',
@@ -210,42 +226,46 @@ const TextArea = () => {
     return $("<li>", {class: 'control-group'}).append([label, textarea, options])
 }
 
-const InfoBox = () => {
-    const infoBox = $('<label/>', {
-        id: 'info-box-0',
-        cols: 70,
-        rows: 4
-    })
-    .wrap($("<div>", {class: 'controls'})).parent();
 
-    const label = $('<label/>', {
-        class: 'control-label',
-        text: 'InfoBox'
+const InfoBox = () => {
+
+    const header = $('<h6>', {
+        id: 'header',
+        class: 'bi bi-info-circle',
+        text: ' '
+    }).append('InfoBox Header');
+
+    const body = $('<section>', {
+        id: 'body',
+        text: 'InfoBox Content'
+    });
+
+    const infoBox = $('<div>', {
+        id: 'info-box-0'
     })
+    .append([header, body])
+
 
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, infoBox, options])
+    return $("<li>", {class: 'control-group'}).append([infoBox, options])
 }
+
 
 const CheckBox = () => {
     const checkBox = $('<input>', {
         id: 'check-box-0',
-        cols: 70,
-        rows: 4
+        type: 'checkbox'
     })
-    .wrap($("<div>", {class: 'controls'})).parent();
-
-    const label = $('<label>', {
-        class: 'control-label',
-        text: 'CheckBox'
-    })
+    .wrap($('<label>', {
+        class: 'control-label'})).parent()
+        .append('CheckBox');
 
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, checkBox, options])
+    return $("<li>", {class: 'control-group'}).append([checkBox, options])
 }
 
 const Table = () => {
@@ -270,20 +290,19 @@ const Table = () => {
 }
 
 const RadioButton = () => {
-    const radioButton = $('<input/>', {
+    const radioButton = $('<input>', {
         id: 'radio-button-0',
-        cols: 70,
-        rows: 4
-    })
-    .wrap($("<div>", {class: 'controls'})).parent();
+        type: 'radio'
+    });
 
-    const label = $('<label/>', {
-        class: 'control-label',
-        text: 'RadioButton'
-    })
+    const label = $('<label>', {
+        // class: 'control-label',
+        text: 'RadioButton',
+        for: 'radio-button-0'
+    });
 
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, radioButton, options])
+    return $("<li>", {class: 'control-group'}).append([radioButton, label, options])
 }

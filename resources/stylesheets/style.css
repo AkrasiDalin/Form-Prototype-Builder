@@ -1,98 +1,133 @@
-ul { list-style-type: none; margin: 0; padding: 0; margin-bottom: 10px; }
-#samples li { margin: 5px; padding: 5px; width: 150px; }
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+#samples li {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 150px;
+  background-color: #0072c6;
+  color: #f7f7f7;
+  cursor: pointer;
+}
+
+#samples li:hover {
+    background-color: #0069b4;
+}
 
 body {
-    background: #f7f7f7;
+  background: #f7f7f7;
+}
+
+nav {
+  background-color: #0072c6;
 }
 
 .wrapper {
-    margin: 25px auto;
+  margin: 60px auto;
 }
 
 #sortable {
-    /* background-color: rgb(200, 200, 255); */
-    border: 1px dashed black;
-    padding: 50px;
-    width: 100%;
-    height: 100%;
+  /* background-color: rgb(200, 200, 255); */
+  border: 1px dashed black;
+  padding: 50px;
+  width: 100%;
+  height: 100%;
 }
 
 .control-group {
-    min-height: 24px;
-    margin-bottom: 30px;
-    position: relative;
-    /* width: 100%; */
-    /* background-color: red; */
+  min-height: 24px;
+  margin-bottom: 30px;
+  position: relative;
+  /* width: 100%; */
+  /* background-color: red; */
 }
-
 
 .control-label {
-    width: 250px;
-    padding-right: 15px;
-    float: left;
-    /* background-color: rgb(252, 206, 0); */
+  width: 250px;
+  padding-right: 15px;
+  float: left;
+  /* background-color: rgb(252, 206, 0); */
 }
-
 
 .controls {
-    /* display: block; */
-    margin-left: 32%;
-    /* background-color: #04AA6D; */
+  /* display: block; */
+  margin-left: 32%;
+  /* background-color: #04AA6D; */
 }
-
-
-
 
 .options {
-    position: absolute;
-    top: 0;
-    right: -20px;
-    width: 30px;
-    /* margin-left: 20px; */
-    /* height: 200px; */
-    opacity: .1;
-
+  position: absolute;
+  top: 0;
+  right: -20px;
+  width: 30px;
+  /* margin-left: 20px; */
+  /* height: 200px; */
+  opacity: 0;
 }
 
-.options:hover {
-    opacity: 1;
+.control-group:hover {
+  outline: 1px dashed #cecece;
+  outline-offset: 20px;
+}
 
+.control-group:hover .options {
+  opacity: 1;
 }
 
 .btn-group button {
-    background-color: #04AA6D;
-    border: 1px solid green;
-    color: white;
-    padding: 2px 7px;
-    cursor: pointer;
+  background-color: #04aa6d;
+  border: 1px solid green;
+  color: white;
+  padding: 2px 7px;
+  cursor: pointer;
 
-    /* height: 30px; */
-    /* display: block; */
+  /* height: 30px; */
+  /* display: block; */
 }
 
 .btn-group button:not(:last-child) {
-    border-bottom: none;
+  border-bottom: none;
 }
 
-
 .btn-group button:first-child {
-    border-top-left-radius: 25%;
-    border-bottom-left-radius: 25%;
+  border-top-left-radius: 25%;
+  border-bottom-left-radius: 25%;
 }
 
 .btn-group button:last-child {
-    border-top-right-radius: 25%;
-    border-bottom-right-radius: 25%;
+  border-top-right-radius: 25%;
+  border-bottom-right-radius: 25%;
 }
-  
+
 .btn-group button:hover {
-    background-color: #3e8e41;
+  background-color: #3e8e41;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-select {
-    width: 295px;
+form select {
+  width: 295px;
+}
+
+form input[type='checkbox'], form input[type='radio'] {
+  margin-right: 10px;
+}
+
+
+form li h3 {
+    margin-bottom: 50px;
+}
+
+
+form li #info-box-0 {
+  background-color: rgba(0,114,198,0.1);
+  padding: 10px;
+  border-radius: 12px;
+
 }
