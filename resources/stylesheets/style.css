@@ -44,6 +44,7 @@ nav {
   position: relative;
   /* width: 100%; */
   /* background-color: red; */
+  /* border-radius: 1px; */
 }
 
 .control-label {
@@ -78,32 +79,29 @@ nav {
   opacity: 1;
 }
 
-.btn-group button {
+.btn-group span {
   background-color: #04aa6d;
   border: 1px solid green;
   color: white;
   padding: 2px 7px;
   cursor: pointer;
-
+  border-radius: 0px;
   /* height: 30px; */
   /* display: block; */
 }
 
-.btn-group button:not(:last-child) {
-  border-bottom: none;
-}
 
-.btn-group button:first-child {
+.btn-group > span:first-child {
   border-top-left-radius: 25%;
   border-bottom-left-radius: 25%;
 }
 
-.btn-group button:last-child {
+.btn-group > span:last-child {
   border-top-right-radius: 25%;
   border-bottom-right-radius: 25%;
 }
 
-.btn-group button:hover {
+.btn-group span:hover {
   background-color: #3e8e41;
 }
 
@@ -125,7 +123,7 @@ form li h3 {
 }
 
 
-form li #info-box-0 {
+form li[id*='info-box'] > div {
   background-color: rgba(0,114,198,0.1);
   padding: 10px;
   border-radius: 12px;

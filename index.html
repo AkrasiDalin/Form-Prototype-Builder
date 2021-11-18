@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Draggable + Sortable</title>
+  <title>Form Prototyper Builder</title>
   <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  <link rel="stylesheet" href="resources/stylesheets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
@@ -43,6 +43,7 @@
             <button class="btn bg-white" onclick="generatePDF()">PRINT</button>
           </li>
         </ul>
+        <h4 class="text-light fw-bold">Form Prototyper Builder</h4>
       </div>
     </div>
   </nav>
@@ -65,18 +66,17 @@
             </ul>
         </div>
         
-        <form class="col-10">
+        <form class="col-10" spellcheck="false">
             <ul id="sortable">
-              <li><h3>Title</h3></li>
-                <!-- <li class="ui-state-default">Item 1</li>
-                <li class="ui-state-default">Item 2</li>
-                <li class="ui-state-default">Item 3</li>
-                <li class="ui-state-default">Item 4</li>
-                <li class="ui-state-default">Item 5</li> -->
+              <li><h3 contenteditable="true">Title</h3></li>
             </ul>
           </form>
     </div>
 </div>
- 
+ <footer>
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2021 Copyright | Original author: <b>Dalin Akrasi</b>
+  </div>
+ </footer>
 </body>
 </html>

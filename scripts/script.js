@@ -1,6 +1,6 @@
 $( function() {
     $( "#sortable" ).sortable({
-        // revert: true
+        handle: ".handle"
     });
     $( ".draggable" ).draggable({
         connectToSortable: "#sortable",
@@ -9,93 +9,85 @@ $( function() {
         appendTo: "#sortable",
         distance: "100",
         stop: function( event, ui ) {
-            let elemID = ui.helper.prevObject.attr('id');
-            console.log("act full:",elemID)
-            console.log("act helper:",ui.helper[0])
-            switch (elemID){
+            let origElemID = ui.helper.prevObject.attr('id');
+            let newElem = '';
+            console.log("act full:",origElemID)
+            console.log("act helper:",ui.helper)
+            switch (origElemID){
                 case 'date-box':
                     console.log('DateBox')
-                    ui.helper.replaceWith(DateBox()).draggable();
+                    newElem = DateBox();
                     break;
                 case 'text-box':
                     console.log('TextBox')
-                    ui.helper.replaceWith(TextBox()).draggable();
+                    newElem = TextBox();
                     break;
                 case 'section-label':
                     console.log('SectionLabel')
-                    ui.helper.replaceWith(SectionLabel()).draggable();
+                    newElem = SectionLabel();
                     break;
                 case 'label':
                     console.log('Label')
-                    ui.helper.replaceWith(Label()).draggable();
+                    newElem = Label();
                     break;
                 case 'info-label':
                     console.log('InfoLabel')
-                    ui.helper.replaceWith(InfoLabel()).draggable();
+                    newElem = InfoLabel();
                     break;
                 case 'drop-down':
                     console.log('DropDown')
-                    ui.helper.replaceWith(DropDown()).draggable();
+                    newElem = DropDown();
                     break;
                 case 'text-area':
                     console.log('TextArea')
-                    ui.helper.replaceWith(TextArea()).draggable();
+                    newElem = TextArea();
                     break;
                 case 'info-box':
                     console.log('InfoBox')
-                    ui.helper.replaceWith(InfoBox()).draggable();
+                    newElem = InfoBox();
                     break;
                 case 'check-box':
                     console.log('CheckBox')
-                    ui.helper.replaceWith(CheckBox()).draggable();
+                    newElem = CheckBox();
                     break;
                 case 'table':
                     console.log('Table')
-                    ui.helper.replaceWith(Table()).draggable();
+                    newElem = Table();
                     break;
                 case 'radio-button':
                     console.log('RadioButton')
-                    ui.helper.replaceWith(RadioButton()).draggable();
+                    newElem = RadioButton();
                     break;
                 default: '';
             }
-            
-            // ui.helper.find(".delete").click(function(){console.log(this.closest('.draggable').remove())});
-       },
-    //    create: function( event, ui ) {
-    //         console.log("create")
-    //     },
-        // drag: function( event, ui ) {
-        // console.log("drag")
-        // },
-        // start: function( event, ui ) {
-        //     console.log("start")
-        // },
-        // stop: function( event, ui ) {
-        //     console.log("stop")
-        // },
-    });
-    $( "ul, li" ).disableSelection();
+            ui.helper.replaceWith(newElem).draggable();
+            $('.editable').attr('contenteditable', 'true');
+            newElem.attr('id', getNewID(origElemID) )
+            console.log(`\n\nFrom: ${origElemID}, To: ${newElem.attr('id')}`)
 
-    // $(".delete").click(function(){console.log(this.closest('.draggable').remove())});
+       },
+    });
 } );
 
+function getNewID(id){
+    return `${id}-${document.querySelectorAll(`*[class="control-group"][id*="${id}"]`).length}`;
+}
+
 const Options = () => {
-    const dragBtn = $('<button/>', {
+    const dragBtn = $('<span>', {
         id: 'drag',
-        // class: 'btn',
-        text: 'X'
-    }).click(function(){$(this).closest('li').remove()});
+        class: 'btn handle bi bi-arrows-move',
+        // type: 'button'
+    })//.click(function(){});
 
 
     let menu = `
     <div class="dropdown">
-  <button type="button" class="btn btn-primary  bi bi-tools" data-bs-toggle="dropdown">
-    </button>
+    <span class="btn btn-primary  bi bi-tools" data-bs-toggle="dropdown">
+    </span>
     <ul class="dropdown-menu">
-        <input type='text'>
-        <li><a class="dropdown-item" href="#">Link 2</a></li>
-        <li><a class="dropdown-item" href="#">Link 3</a></li>
+        <li><a class="dropdown-item" href="#">Option 1</a></li>
+        <li><a class="dropdown-item" href="#">Option 2</a></li>
     </ul>
     </div>
     `;
@@ -106,24 +98,24 @@ const Options = () => {
     //     // text: ''
     // }).click(function(){$(this).closest('li').remove()});
 
-    const deleteBtn = $('<button/>', {
-        class: 'bi bi-trash',
+    const deleteBtn = $('<span>', {
+        class: 'btn bi bi-trash',
         // text: 'X'
     }).click(function(){$(this).closest('li').remove()});
 
-    return $("<div>", {class: 'options btn-group'}).append([editBtn, deleteBtn])
+    return $("<div>", {class: 'options btn-group'}).append([dragBtn, editBtn, deleteBtn])
 }
 
 const DateBox = () => {
     const datebox = $('<input>', {
-        id: 'date-box-0',
+        // id: 'date-box-',
     })
     .wrap($("<div>", {class: 'controls'})).parent();
 
     const label = $('<label/>', {
-        class: 'control-label',
-        text: 'Datebox'
-    })
+        class: 'control-label editable',
+        text: 'Datebox',
+    });
 
     let options = Options();
 
@@ -132,15 +124,15 @@ const DateBox = () => {
 }
 
 const TextBox = () => {
-    const textbox = $('<input/>', {
-        id: 'text-box-0',
+    const textbox = $('<input>', {
+        // id: 'text-box-',
         cols: 70,
         rows: 4
     })
     .wrap($("<div>", {class: 'controls'})).parent();
 
-    const label = $('<label/>', {
-        class: 'control-label',
+    const label = $('<label>', {
+        class: 'control-label editable',
         text: 'TextBox'
     })
 
@@ -151,9 +143,9 @@ const TextBox = () => {
 }
 
 const SectionLabel = () => {
-    const sectionLabel = $('<h5/>', {
-        id: 'section-label-0',
-        class: 'control-label',
+    const sectionLabel = $('<h5>', {
+        // id: 'section-label-',
+        class: 'control-label editable',
         text: 'SectionLabel'
     });
 
@@ -165,8 +157,8 @@ const SectionLabel = () => {
 
 const Label = () => {
     const label = $('<label>', {
-        id: 'label',
-        class: 'control-label',
+        // id: 'label',
+        class: 'control-label editable',
         text: 'Label'
     });
 
@@ -177,9 +169,9 @@ const Label = () => {
 }
 
 const InfoLabel = () => {
-    const infoLabel = $('<label/>', {
-        id: 'info-label-0',
-        class: 'control-label',
+    const infoLabel = $('<label>', {
+        // id: 'info-label-',
+        class: 'control-label editable',
         text: 'InfoLabel'
     });
 
@@ -190,13 +182,13 @@ const InfoLabel = () => {
 }
 
 const DropDown = () => {
-    const dropdown = $('<select/>', {
-        id: 'drop-down-0',
+    const dropdown = $('<select>', {
+        // id: 'drop-down-',
     })
     .wrap($("<div>", {class: 'controls'})).parent();
 
-    const label = $('<label/>', {
-        class: 'control-label',
+    const label = $('<label>', {
+        class: 'control-label editable',
         text: 'Dropdown'
     })
 
@@ -208,15 +200,15 @@ const DropDown = () => {
 
 
 const TextArea = () => {
-    const textarea = $('<textarea/>', {
-        id: 'text-area-0',
+    const textarea = $('<textarea>', {
+        // id: 'text-area-',
         cols: 70,
         rows: 4
     })
     .wrap($("<div>", {class: 'controls'})).parent();
 
-    const label = $('<label/>', {
-        class: 'control-label',
+    const label = $('<label>', {
+        class: 'control-label editable',
         text: 'TextArea'
     })
 
@@ -230,18 +222,19 @@ const TextArea = () => {
 const InfoBox = () => {
 
     const header = $('<h6>', {
-        id: 'header',
-        class: 'bi bi-info-circle',
+        // id: 'header',
+        class: 'bi bi-info-circle editable',
         text: ' '
     }).append('InfoBox Header');
 
     const body = $('<section>', {
-        id: 'body',
+        // id: 'body',
+        class: 'editable',
         text: 'InfoBox Content'
     });
 
     const infoBox = $('<div>', {
-        id: 'info-box-0'
+        // id: 'info-box-'
     })
     .append([header, body])
 
@@ -255,11 +248,11 @@ const InfoBox = () => {
 
 const CheckBox = () => {
     const checkBox = $('<input>', {
-        id: 'check-box-0',
+        // id: 'check-box-',
         type: 'checkbox'
     })
     .wrap($('<label>', {
-        class: 'control-label'})).parent()
+        class: 'control-label editable'})).parent()
         .append('CheckBox');
 
     let options = Options();
@@ -269,17 +262,17 @@ const CheckBox = () => {
 }
 
 const Table = () => {
-    const tableRow = $('<td>')
+    const tableRow = $('<td>', {class: 'editable', text: 'column'})
     .wrap($("<tr>")).parent();
 
     const table = $('<table>', {
-        id: 'table-0'
+        // id: 'table-'
     })
     .append(tableRow)
     .wrap($("<div>", {class: 'controls'})).parent();
 
     const label = $('<label>', {
-        class: 'control-label',
+        class: 'control-label editable',
         text: 'Table'
     })
 
@@ -291,14 +284,14 @@ const Table = () => {
 
 const RadioButton = () => {
     const radioButton = $('<input>', {
-        id: 'radio-button-0',
+        // id: 'radio-button-',
         type: 'radio'
     });
 
     const label = $('<label>', {
-        // class: 'control-label',
+        class: 'editable',
         text: 'RadioButton',
-        for: 'radio-button-0'
+        for: 'radio-button-'
     });
 
     let options = Options();
