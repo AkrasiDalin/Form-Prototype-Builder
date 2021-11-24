@@ -123,7 +123,7 @@ const EventsWindow = (caller) => {
 
     const optionSelect = $('<select>', {
         class: 'form-select evt-option',
-    }).append($('<option>', {value: 'show', text: '...'}));
+    });//.append($('<option>', {value: 'show', text: '...'}));
 
     const optionOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
     .append([optionLabel, optionSelect])
@@ -166,6 +166,7 @@ const EventsWindow = (caller) => {
 
     const secondRow = $('<div>', {class:'row mb-3  evt-action'}).append([doOuterWrapper, itemOuterWrapper]);
     
+
     const addActionLabel = $('<span>', {
         class: 'bi bi-plus-circle-fill',
         text: ' Add action'
@@ -178,14 +179,11 @@ const EventsWindow = (caller) => {
     const firstOuterDiv = $('<div>', {class:'evt-group'}).append([firstRow, secondRow, addActionLabel, '<hr>']);
 
 
-    
-
     const addEventButton = $('<span>', {
         class: 'bi bi-plus-circle-fill display-6',
     })
     .click(function(){
         let prevEvent = $(this).parent().prev('.evt-group');
-        console.log('about to attach ev-->', firstOuterDiv)
         prevEvent.after(firstOuterDiv.clone(true))})
     .wrap($('<div>', {class: 'text-center'})).parent();
 
@@ -214,7 +212,19 @@ const Options = () => {
         let isEvtWindowCreated = parentLi.find('.evt-window').length === 1;
 
         $('.evt-window').hide();
-        isEvtWindowCreated ? parentLi.find('.evt-window').show() : parentLi.append(EventsWindow(this))
+        isEvtWindowCreated ? parentLi.find('.evt-window').show() : parentLi.append(EventsWindow(this));
+        let evtOptions = parentLi.find('.evt-option');
+        let selectOptions = parentLi.find('.controls select').children();
+        
+        evtOptions.each((ix, elm)=>{
+            console.log(elm)
+            let $evtOption = $(elm).empty();
+            $evtOption.append($('<option>'),{text: '...'});
+            selectOptions.clone().appendTo($evtOption);
+        });
+        
+        
+        
     });
 
     const deleteBtn = $('<span>', {
@@ -315,8 +325,9 @@ const Modal = () => {
 
     const updateButton = $('<input>',{type:'button', class:'btn btn-success', 'data-bs-dismiss':'modal', value: 'Update options'})
     .click(function(){
-        let select = $(this).closest('li').find('select').empty();
+        let select = $(this).closest('li').find('.controls select').empty();
         let modal = $(this).closest('li').find('.modal textarea');
+
         let options = modal.val().trim().split('\n');
         console.log('modal list is--->', options)
         select.append($('<option>', {text: '...'}));
