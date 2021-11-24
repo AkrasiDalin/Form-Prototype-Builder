@@ -67,17 +67,28 @@ $( function() {
             ui.helper.replaceWith(newElem).draggable();
             $('.editable').attr('contenteditable', 'true');
             newElem.attr('id', getNewID(origElemID) )
+            newElem.find('.field-index').text(getNewIndex())
             console.log(`\n\nFrom: ${origElemID}, To: ${newElem.attr('id')}`)
 
        },
     });
 } );
 
+function getNewIndex(){
+    return document.querySelectorAll('#sortable li').length - 1;
+}
+
 function getNewID(id){
     return `${id}-${document.querySelectorAll(`*[class="control-group"][id*="${id}"]`).length}`;
 }
 
-const EventsWindow = () => {
+const EventsWindow = (caller) => {
+    const indexVal = $(caller).closest('li').find('.field-index:first').text();
+    const header = $('<div>', {class: 'evt-window-header'})
+    .append([$('<h5>', {text: `#${indexVal}`}),
+            $('<h5>', {class: 'title', text: 'Set event listener'}),
+            $('<span>', {class: 'btn-close'}).click(()=>$('.evt-window').hide())])
+ 
     //On
     const onLabel = $('<span>', {
         class: 'input-group-text',
@@ -144,46 +155,67 @@ const EventsWindow = () => {
     .append([itemLabel, itemInput])
     .wrap($('<div>',{class: 'col-7 form-inline'})).parent();
 
-    const secondRow = $('<div>', {class:'row mb-3'}).append([doOuterWrapper, itemOuterWrapper]);
+    const secondRow = $('<div>', {class:'row mb-3  evt-action'}).append([doOuterWrapper, itemOuterWrapper]);
     
-
-    const firstOuterDiv = $('<div>', {class:'event-group'}).append([firstRow, secondRow]);
-
-
     const addActionLabel = $('<span>', {
         class: 'bi bi-plus-circle-fill',
         text: ' Add action'
-    }).wrap($('<div>', {id: 'add-action-btn', class: 'btn btn-warning'})).parent();
+    })
+    .click(function(){
+        let prevAction = $(this).parent().prev('.evt-action');
+        prevAction.after(secondRow.clone())})
+    .wrap($('<div>', {id: 'add-action-btn', class: 'btn btn-warning'})).parent();
+
+    const firstOuterDiv = $('<div>', {class:'evt-group'}).append([firstRow, secondRow, addActionLabel, '<hr>']);
+
+
+    
 
     const addEventButton = $('<span>', {
         class: 'bi bi-plus-circle-fill display-6',
-    }).wrap($('<div>', {class: 'text-center'})).parent();
+    })
+    .click(function(){
+        let prevEvent = $(this).parent().prev('.evt-group');
+        console.log('about to attach ev-->', firstOuterDiv)
+        prevEvent.after(firstOuterDiv.clone(true))})
+    .wrap($('<div>', {class: 'text-center'})).parent();
 
     const attachEventButton = $('<span>', {
-        class: 'bi bi-plus-circle-fill',
+        class: 'bi bi-check-lg',
         text: ' Attach event'
-    }).wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'})).parent();
+    })
+    .wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'})).parent();
 
-    return $('<div>', {class: 'bg-secondary event-window'}).append([firstOuterDiv, addActionLabel, '<hr>', addEventButton, '<hr>', attachEventButton]);
+    return $('<div>', {class: 'bg-secondary evt-window',}).append([header, firstOuterDiv, addEventButton, '<hr>', attachEventButton]).clone(true);
 
 }
 
 const Options = () => {
+    const fieldIndex = $('<span>', {class: 'field-index', text: '0'});
     const dragBtn = $('<span>', {
         id: 'drag',
-        class: 'btn handle bi bi-arrows-move',
+        class: 'handle bi bi-arrows-move',
     });
 
     const editBtn = $('<span>', {
         id: 'edit',
         class: 'bi bi-tools',
-    }).click(function(){$(this).closest('li').append(EventsWindow())});
+    }).click(function(){
+        let parentLi = $(this).closest('li');
+        let isEvtWindowCreated = parentLi.find('.evt-window').length === 1;
+
+        $('.evt-window').hide();
+        isEvtWindowCreated ? parentLi.find('.evt-window').show() : parentLi.append(EventsWindow(this))
+    });
 
     const deleteBtn = $('<span>', {
-        class: 'btn bi bi-trash',
+        class: 'bi bi-trash',
     }).click(function(){$(this).closest('li').remove()});
 
-    return $("<div>", {class: 'options btn-group'}).append([dragBtn, editBtn, deleteBtn])
+    const container = $("<div>", {class: 'btn-group'}).append([dragBtn, editBtn, deleteBtn])
+
+    return $("<div>", {class: 'options'}).append([fieldIndex, container])
+    // return $("<div>", {class: 'options btn-group'}).append([fieldIndex, dragBtn, editBtn, deleteBtn])
 }
 
 const DateBox = () => {
@@ -314,7 +346,7 @@ const InfoBox = () => {
     });
 
     const infoBox = $('<div>', {
-        // id: 'info-box-'
+        class: 'info-container'
     })
     .append([header, body])
 

@@ -65,6 +65,15 @@ nav {
   /* background-color: #04AA6D; */
 }
 
+.control-group:hover {
+  outline: 1px dashed #cecece;
+  outline-offset: 20px;
+}
+
+.control-group:hover .options {
+  opacity: 1;
+}
+
 .options {
   position: absolute;
   top: 0;
@@ -73,15 +82,16 @@ nav {
   /* margin-left: 20px; */
   /* height: 200px; */
   opacity: 0;
+  /* background-color: #0069b4; */
+  pointer-events: none ;
+  /* z-index: -1; */
+  width: 100%;
 }
 
-.control-group:hover {
-  outline: 1px dashed #cecece;
-  outline-offset: 20px;
-}
-
-.control-group:hover .options {
-  opacity: 1;
+.btn-group {
+  position: absolute;
+  pointer-events: auto ;
+  right: 0;
 }
 
 .btn-group span {
@@ -95,6 +105,18 @@ nav {
   /* display: block; */
 }
 
+.options .field-index {
+  /* background-color: red; */
+  /* right: 720px; */
+  right: 66px;
+  position: relative;
+  border-left: 2px dashed #cecece;
+  color: rgb(182, 182, 182);
+  /* outline: 1px dashed #cecece; */
+  /* border-radius: 15%; */
+  padding: 5px;
+  /* z-index: 1000; */
+}
 
 .btn-group > span:first-child {
   border-top-left-radius: 25%;
@@ -128,34 +150,42 @@ form li h3 {
 }
 
 
-form li[id*='info-box'] > div {
+form li[id*='info-box'] > div.info-container {
   background-color: rgba(0,114,198,0.1);
   padding: 10px;
   border-radius: 12px;
 
 }
 
-.event-window {
+.evt-window {
   width: 400px;
   margin: auto;
-  padding: 20px 10px;
+  padding: 20px 30px;
   border-radius: 10px;
   color: azure;
   position: fixed;
-  right: 0;
+  right: 20px;
+  top: 70px;
   z-index: 1000;
   opacity: .1;
 }
 
-.event-window:hover {
+.evt-window:hover {
   opacity: 1;
 }
 
-.event-window #attach-btn {
+.evt-window #attach-btn {
   width: 100%;
 }
 
-.event-window #add-action-btn {
+.evt-window #add-action-btn {
   border-radius: 5px;
   padding: 0 5px;
+}
+
+
+.evt-window .evt-window-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
