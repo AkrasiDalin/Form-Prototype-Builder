@@ -58,6 +58,9 @@ nav {
   width: auto;
 }
 
+.modal-trigger {
+  opacity: .0;
+}
 
 .controls {
   /* display: block; */
@@ -71,6 +74,10 @@ nav {
 }
 
 .control-group:hover .options {
+  opacity: 1;
+}
+
+.control-group:hover .modal-trigger {
   opacity: 1;
 }
 

@@ -64,11 +64,20 @@ $( function() {
                     break;
                 default: '';
             }
+
             ui.helper.replaceWith(newElem).draggable();
             $('.editable').attr('contenteditable', 'true');
-            newElem.attr('id', getNewID(origElemID) )
+
+            let newID =  getNewID(origElemID);
+            newElem.attr('id', newID)
             newElem.find('.field-index').text(getNewIndex())
-            console.log(`\n\nFrom: ${origElemID}, To: ${newElem.attr('id')}`)
+
+            console.log(`\n\nFrom: ${origElemID}, To: ${newElem.attr('id')}`);
+
+            if(origElemID === 'drop-down'){
+                newElem.find('.modal').attr('id', `${newID}-modal`)
+                newElem.find('.modal-trigger').attr('data-bs-target', `#${newID}-modal`);
+            }
 
        },
     });
@@ -293,11 +302,46 @@ const InfoLabel = () => {
     return $("<li>", {class: 'control-group'}).append([infoLabel, options])
 }
 
-const DropDown = () => {
-    const dropdown = $('<select>', {
-        // id: 'drop-down-',
+
+const Modal = () => {
+    const modalHeader = $('<div>', {class:'modal-header'}).append([
+        $('<h6>', {class:'modal-title', text: 'Add each option on a new line'}),
+        $('<input>',{type:'button', class:'btn-close', 'data-bs-dismiss':'modal'})
+    ]);
+
+    const modalBody = $('<div>', {class:'modal-body'}).append([
+        $('<textarea>', {cols: 33, rows:'4'})
+    ]);
+
+    const updateButton = $('<input>',{type:'button', class:'btn btn-success', 'data-bs-dismiss':'modal', value: 'Update options'})
+    .click(function(){
+        let select = $(this).closest('li').find('select').empty();
+        let modal = $(this).closest('li').find('.modal textarea');
+        let options = modal.val().trim().split('\n');
+        console.log('modal list is--->', options)
+        select.append($('<option>', {text: '...'}));
+        
+        for(let option of options){
+            let txt = option.trim();
+            select.append($('<option>', {text: txt, value: txt}));
+        }
     })
-    .wrap($("<div>", {class: 'controls'})).parent();
+    const modalFooter = $('<div>', {class:'modal-footer'}).append([updateButton]);
+
+    const modalContent = $('<div>', {class:'modal-content'}).append([modalHeader, modalBody, modalFooter]);
+    const modalDialog = $('<div>', {class:'modal-dialog modal-sm'}).append(modalContent);
+    
+    return $('<div>', {class:'modal', id:''}).append(modalDialog);
+}
+
+const DropDown = () => {
+
+    // const modal = $()
+
+    const dropdown = $("<div>", {class: 'controls'}).append([
+        $('<span>', {class: 'modal-trigger bi bi-pencil-fill', 'data-bs-toggle':'modal', 'data-bs-target': '#'}),
+        ' <select>'
+    ]);
 
     const label = $('<label>', {
         class: 'control-label editable',
@@ -307,7 +351,7 @@ const DropDown = () => {
     let options = Options();
 
 
-    return $("<li>", {class: 'control-group'}).append([label, dropdown, options])
+    return $("<li>", {class: 'control-group'}).append([label, dropdown, Modal(), options])
 }
 
 
