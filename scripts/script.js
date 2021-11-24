@@ -58,6 +58,10 @@ $( function() {
                     console.log('RadioButton')
                     newElem = RadioButton();
                     break;
+                case 'submission':
+                    console.log('Submission')
+                    newElem = Submission();
+                    break;
                 default: '';
             }
             ui.helper.replaceWith(newElem).draggable();
@@ -73,34 +77,110 @@ function getNewID(id){
     return `${id}-${document.querySelectorAll(`*[class="control-group"][id*="${id}"]`).length}`;
 }
 
+const EventsWindow = () => {
+    //On
+    const onLabel = $('<span>', {
+        class: 'input-group-text',
+        text: 'On'
+    });
+
+    const onSelect = $('<select>', {
+        class: 'form-select evt-select',
+    }).append([
+        $('<option>', {value: 'click', text: 'click'}), $('<option>', {value: 'select', text: 'select'}) 
+    ]);
+
+    const onOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
+    .append([onLabel, onSelect])
+    .wrap($('<div>',{class: 'col-5 form-inline'})).parent();
+
+
+    //Options
+    const optionLabel = $('<span>', {
+        class: 'input-group-text',
+        text: 'Option'
+    });
+
+    const optionSelect = $('<select>', {
+        class: 'form-select evt-option',
+    }).append($('<option>', {value: 'show', text: '...'}));
+
+    const optionOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
+    .append([optionLabel, optionSelect])
+    .wrap($('<div>',{class: 'col-7 form-inline'})).parent();
+
+    const firstRow = $('<div>', {class:'row mb-3'}).append([onOuterWrapper, optionOuterWrapper]);
+
+
+    //Do
+    const doLabel = $('<span>', {
+        class: 'input-group-text',
+        text: 'Do'
+    });
+
+    const doSelect = $('<select>', {
+        class: 'form-select evt-do',
+    }).append([
+        $('<option>', {value: 'show', text: 'show'}), $('<option>', {value: 'hide', text: 'hide'}),
+        $('<option>', {value: 'enable', text: 'enable'}), $('<option>', {value: 'disable', text: 'disable'}), 
+    ]);
+
+    const doOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
+    .append([doLabel, doSelect])
+    .wrap($('<div>',{class: 'col-5 form-inline'})).parent();
+
+
+    //Item(s)
+    const itemLabel = $('<span>', {
+        class: 'input-group-text',
+        text: 'Item(s)'
+    });
+
+    const itemInput = $('<input>', {
+        class: 'form-control evt-item',
+    });
+
+    const itemOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
+    .append([itemLabel, itemInput])
+    .wrap($('<div>',{class: 'col-7 form-inline'})).parent();
+
+    const secondRow = $('<div>', {class:'row mb-3'}).append([doOuterWrapper, itemOuterWrapper]);
+    
+
+    const firstOuterDiv = $('<div>', {class:'event-group'}).append([firstRow, secondRow]);
+
+
+    const addActionLabel = $('<span>', {
+        class: 'bi bi-plus-circle-fill',
+        text: ' Add action'
+    }).wrap($('<div>', {id: 'add-action-btn', class: 'btn btn-warning'})).parent();
+
+    const addEventButton = $('<span>', {
+        class: 'bi bi-plus-circle-fill display-6',
+    }).wrap($('<div>', {class: 'text-center'})).parent();
+
+    const attachEventButton = $('<span>', {
+        class: 'bi bi-plus-circle-fill',
+        text: ' Attach event'
+    }).wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'})).parent();
+
+    return $('<div>', {class: 'bg-secondary event-window'}).append([firstOuterDiv, addActionLabel, '<hr>', addEventButton, '<hr>', attachEventButton]);
+
+}
+
 const Options = () => {
     const dragBtn = $('<span>', {
         id: 'drag',
         class: 'btn handle bi bi-arrows-move',
-        // type: 'button'
-    })//.click(function(){});
+    });
 
-
-    let menu = `
-    <div class="dropdown">
-    <span class="btn btn-primary  bi bi-tools" data-bs-toggle="dropdown">
-    </span>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Option 1</a></li>
-        <li><a class="dropdown-item" href="#">Option 2</a></li>
-    </ul>
-    </div>
-    `;
-    const editBtn = $(menu) 
-    // {
-    //     id: 'edit',
-    //     class: 'bi bi-tools',
-    //     // text: ''
-    // }).click(function(){$(this).closest('li').remove()});
+    const editBtn = $('<span>', {
+        id: 'edit',
+        class: 'bi bi-tools',
+    }).click(function(){$(this).closest('li').append(EventsWindow())});
 
     const deleteBtn = $('<span>', {
         class: 'btn bi bi-trash',
-        // text: 'X'
     }).click(function(){$(this).closest('li').remove()});
 
     return $("<div>", {class: 'options btn-group'}).append([dragBtn, editBtn, deleteBtn])
@@ -145,7 +225,7 @@ const TextBox = () => {
 const SectionLabel = () => {
     const sectionLabel = $('<h5>', {
         // id: 'section-label-',
-        class: 'control-label editable',
+        class: 'control-label editable extensive-label',
         text: 'SectionLabel'
     });
 
@@ -158,7 +238,7 @@ const SectionLabel = () => {
 const Label = () => {
     const label = $('<label>', {
         // id: 'label',
-        class: 'control-label editable',
+        class: 'control-label editable extensive-label',
         text: 'Label'
     });
 
@@ -252,7 +332,7 @@ const CheckBox = () => {
         type: 'checkbox'
     })
     .wrap($('<label>', {
-        class: 'control-label editable'})).parent()
+        class: 'control-label editable extensive-label'})).parent()
         .append('CheckBox');
 
     let options = Options();
@@ -289,7 +369,7 @@ const RadioButton = () => {
     });
 
     const label = $('<label>', {
-        class: 'editable',
+        class: 'editable extensive-label',
         text: 'RadioButton',
         for: 'radio-button-'
     });
@@ -298,4 +378,20 @@ const RadioButton = () => {
 
 
     return $("<li>", {class: 'control-group'}).append([radioButton, label, options])
+}
+
+
+const Submission = () => {
+    const submit = $('<input>', {
+        type: 'button',
+        value: 'SUBMIT',
+        class: 'btn bg-success text-light m-2'
+    });
+    const cancel = $('<input>', {
+        type: 'button',
+        value: 'CANCEL',
+        class: 'btn btn-outline-dark'
+    });
+
+    return $("<li>", {class: 'control-group text-center'}).append([submit, cancel])
 }
