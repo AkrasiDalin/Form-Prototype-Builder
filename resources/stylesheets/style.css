@@ -42,9 +42,7 @@ nav {
   min-height: 24px;
   margin-bottom: 30px;
   position: relative;
-  /* width: 100%; */
   /* background-color: red; */
-  /* border-radius: 1px; */
 }
 
 .control-label {
@@ -59,11 +57,13 @@ nav {
 }
 
 .modal-trigger {
+  position: absolute;
+  margin-left: -20px;
+  color: #04aa6d;
   opacity: .0;
 }
 
 .controls {
-  /* display: block; */
   margin-left: 32%;
   /* background-color: #04AA6D; */
 }
@@ -86,12 +86,9 @@ nav {
   top: 0;
   right: -20px;
   width: 30px;
-  /* margin-left: 20px; */
-  /* height: 200px; */
   opacity: 0;
   /* background-color: #0069b4; */
   pointer-events: none ;
-  /* z-index: -1; */
   width: 100%;
 }
 
@@ -108,21 +105,15 @@ nav {
   padding: 2px 7px;
   cursor: pointer;
   border-radius: 0px;
-  /* height: 30px; */
-  /* display: block; */
 }
 
 .options .field-index {
   /* background-color: red; */
-  /* right: 720px; */
   right: 66px;
   position: relative;
   border-left: 2px dashed #cecece;
-  color: rgb(182, 182, 182);
-  /* outline: 1px dashed #cecece; */
-  /* border-radius: 15%; */
+  color: rgb(150, 150, 150);
   padding: 5px;
-  /* z-index: 1000; */
 }
 
 .btn-group > span:first-child {

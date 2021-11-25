@@ -91,14 +91,55 @@ function getNewID(id){
     return `${id}-${document.querySelectorAll(`*[class="control-group"][id*="${id}"]`).length}`;
 }
 
+
+function findTargets(targets = []){
+    return $('.field-index')
+            .filter((ix, elm)=>targets.indexOf($(elm).text()) !== -1)
+            .closest('li')
+            .find('.controls input, label input, input[type="radio"], .controls select, .controls textarea')
+}
+
+function attachEvent(caller, eventType, actions, option = ''){
+    console.log(`\nATTACHING: ....When ${eventType} on ${option}, then:`, actions)
+    $(caller).on(eventType, function(){
+        let val = this.value;
+        console.log('selected opt:',val)
+        actions.forEach((obj)=>{
+            console.log('running inside each:', obj)
+            let $targets = findTargets(obj.items);
+            console.log('TARGETS FOUND ARE:', $targets)
+            if(val === option){
+                switch(obj.action){
+                    case 'show':
+                        $targets.show();
+                        break;
+                    case 'hide':
+                        $targets.hide();
+                        break;
+                    case 'enable':
+                        $targets.prop('disabled', false);
+                        break;
+                    case 'disable':
+                        $targets.prop('disabled', true);
+                        break;
+                    default: ''
+                }
+            }
+        })
+    })
+}
+
 const EventsWindow = (caller) => {
-    const indexVal = $(caller).closest('li').find('.field-index:first').text();
+    const parentLi = $(caller).closest('li');
+    let indexVal = parentLi.find('.field-index:first').text();
+    console.log(caller,'_has ID:',caller.id,'_the vallll:', indexVal)
     const header = $('<div>', {class: 'evt-window-header'})
     .append([$('<h5>', {text: `#${indexVal}`}),
             $('<h5>', {class: 'title', text: 'Set event listener'}),
             $('<span>', {class: 'btn-close'}).click(()=>$('.evt-window').hide())])
  
-    //On
+    if(!caller.id){
+        //On
     const onLabel = $('<span>', {
         class: 'input-group-text',
         text: 'On'
@@ -107,7 +148,7 @@ const EventsWindow = (caller) => {
     const onSelect = $('<select>', {
         class: 'form-select evt-select',
     }).append([
-        $('<option>', {value: 'click', text: 'click'}), $('<option>', {value: 'select', text: 'select'}) 
+        $('<option>', {value: 'click', text: 'click'}), $('<option>', {value: 'change', text: 'change'}) 
     ]);
 
     const onOuterWrapper =  $('<div>', {class: 'input-group input-group-sm'})
@@ -190,14 +231,31 @@ const EventsWindow = (caller) => {
     const attachEventButton = $('<span>', {
         class: 'bi bi-check-lg',
         text: ' Attach event'
+    }).click(()=>{
+        parentLi.find('.evt-window .evt-group').each((ix, elm)=>{
+            let eventType = $(elm).find('.row .evt-select:first').val();
+            let option = $(elm).find('.row .evt-option:first').val();
+            let actionsObj = $(elm).find('.row.evt-action');
+            let actions = [];
+            actionsObj.each((ix2, elm2)=>{
+                let action = $(elm2).find('.evt-do').val();
+                let items = $(elm2).find('.evt-item').val().split(';');//.map((el)=>`#${el}`);
+                actions.push({action: action, items: items});
+            });
+            console.log(elm, `....When ${eventType} on ${option}, then:`, actions)
+
+            attachEvent(caller, eventType, actions, option)
+        })
     })
     .wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'})).parent();
 
     return $('<div>', {class: 'bg-secondary evt-window',}).append([header, firstOuterDiv, addEventButton, '<hr>', attachEventButton]).clone(true);
 
+    }
+    
 }
 
-const Options = () => {
+const Options = (field) => {
     const fieldIndex = $('<span>', {class: 'field-index', text: '0'});
     const dragBtn = $('<span>', {
         id: 'drag',
@@ -212,18 +270,19 @@ const Options = () => {
         let isEvtWindowCreated = parentLi.find('.evt-window').length === 1;
 
         $('.evt-window').hide();
-        isEvtWindowCreated ? parentLi.find('.evt-window').show() : parentLi.append(EventsWindow(this));
+        isEvtWindowCreated ? parentLi.find('.evt-window').show() : parentLi.append(EventsWindow(field || this));
         let evtOptions = parentLi.find('.evt-option');
         let selectOptions = parentLi.find('.controls select').children();
         
         evtOptions.each((ix, elm)=>{
-            console.log(elm)
-            let $evtOption = $(elm).empty();
+            console.log('evt-opt:',elm)
+            let $evtOption = $(elm);
+            let selected = $evtOption.val();
+            $evtOption.empty();
             $evtOption.append($('<option>'),{text: '...'});
             selectOptions.clone().appendTo($evtOption);
+            $evtOption.val(selected);
         });
-        
-        
         
     });
 
@@ -334,7 +393,7 @@ const Modal = () => {
         
         for(let option of options){
             let txt = option.trim();
-            select.append($('<option>', {text: txt, value: txt}));
+            txt.length ? select.append($('<option>', {text: txt, value: txt})) : '';
         }
     })
     const modalFooter = $('<div>', {class:'modal-footer'}).append([updateButton]);
@@ -348,10 +407,10 @@ const Modal = () => {
 const DropDown = () => {
 
     // const modal = $()
-
-    const dropdown = $("<div>", {class: 'controls'}).append([
+    const dropdown = $('<select>');
+    const dropdownCombo = $("<div>", {class: 'controls'}).append([
         $('<span>', {class: 'modal-trigger bi bi-pencil-fill', 'data-bs-toggle':'modal', 'data-bs-target': '#'}),
-        ' <select>'
+        dropdown
     ]);
 
     const label = $('<label>', {
@@ -359,10 +418,10 @@ const DropDown = () => {
         text: 'Dropdown'
     })
 
-    let options = Options();
+    let options = Options(dropdown);
 
 
-    return $("<li>", {class: 'control-group'}).append([label, dropdown, Modal(), options])
+    return $("<li>", {class: 'control-group'}).append([label, dropdownCombo, Modal(), options])
 }
 
 
@@ -415,17 +474,16 @@ const InfoBox = () => {
 
 const CheckBox = () => {
     const checkBox = $('<input>', {
-        // id: 'check-box-',
         type: 'checkbox'
-    })
-    .wrap($('<label>', {
-        class: 'control-label editable extensive-label'})).parent()
-        .append('CheckBox');
+    });
 
-    let options = Options();
+    const label = $('<label>', {class: 'control-label editable extensive-label'})
+        .append([checkBox, 'CheckBox']);
+
+    let options = Options(checkBox);
 
 
-    return $("<li>", {class: 'control-group'}).append([checkBox, options])
+    return $("<li>", {class: 'control-group'}).append([label, options])
 }
 
 const Table = () => {
@@ -451,7 +509,6 @@ const Table = () => {
 
 const RadioButton = () => {
     const radioButton = $('<input>', {
-        // id: 'radio-button-',
         type: 'radio'
     });
 
@@ -461,7 +518,7 @@ const RadioButton = () => {
         for: 'radio-button-'
     });
 
-    let options = Options();
+    let options = Options(radioButton);
 
 
     return $("<li>", {class: 'control-group'}).append([radioButton, label, options])
