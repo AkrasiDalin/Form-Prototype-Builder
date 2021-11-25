@@ -96,7 +96,7 @@ function findTargets(targets = []){
     return $('.field-index')
             .filter((ix, elm)=>targets.indexOf($(elm).text()) !== -1)
             .closest('li')
-            .find('.controls input, label input, input[type="radio"], .controls select, .controls textarea')
+            .find('.controls input, label input, input[type="radio"], .controls select, .controls textarea, .info-container')
 }
 
 function attachEvent(caller, eventType, actions, option = ''){
@@ -136,7 +136,7 @@ const EventsWindow = (caller) => {
     const header = $('<div>', {class: 'evt-window-header'})
     .append([$('<h5>', {text: `#${indexVal}`}),
             $('<h5>', {class: 'title', text: 'Set event listener'}),
-            $('<span>', {class: 'btn-close'}).click(()=>$('.evt-window').hide())])
+            $('<span>', {class: 'bi bi-x-square'}).click(()=>$('.evt-window').hide())])
  
     if(!caller.id){
         //On
@@ -231,7 +231,10 @@ const EventsWindow = (caller) => {
     const attachEventButton = $('<span>', {
         class: 'bi bi-check-lg',
         text: ' Attach event'
-    }).click(()=>{
+    })
+    .wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'}))
+    .parent()
+    .click(()=>{
         parentLi.find('.evt-window .evt-group').each((ix, elm)=>{
             let eventType = $(elm).find('.row .evt-select:first').val();
             let option = $(elm).find('.row .evt-option:first').val();
@@ -239,15 +242,17 @@ const EventsWindow = (caller) => {
             let actions = [];
             actionsObj.each((ix2, elm2)=>{
                 let action = $(elm2).find('.evt-do').val();
-                let items = $(elm2).find('.evt-item').val().split(';');//.map((el)=>`#${el}`);
-                actions.push({action: action, items: items});
+                let items = $(elm2).find('.evt-item').val().trim();
+                if(items.length > 0){
+                    items = items.split(';');
+                    actions.push({action: action, items: items});
+                }
             });
             console.log(elm, `....When ${eventType} on ${option}, then:`, actions)
 
             attachEvent(caller, eventType, actions, option)
         })
-    })
-    .wrap($('<div>', {id: 'attach-btn', class: 'btn btn-warning text-center'})).parent();
+    });
 
     return $('<div>', {class: 'bg-secondary evt-window',}).append([header, firstOuterDiv, addEventButton, '<hr>', attachEventButton]).clone(true);
 

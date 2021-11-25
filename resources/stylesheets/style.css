@@ -187,3 +187,8 @@ form li[id*='info-box'] > div.info-container {
   justify-content: space-between;
   margin-bottom: 10px;
 }
+
+.evt-window .evt-window-header .bi-x-square {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
